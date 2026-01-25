@@ -2,7 +2,7 @@
 import { FeedData } from '../types';
 
 // IMPORTANT: In a real scenario, you would replace this URL with your published Google Apps Script Web App URL
-const API_URL = 'https://script.google.com/macros/s/AKfycbxvxpLedQk_nWNxz5HF5lKVjqEE9DiTMptyjQl2r7MNzdaWy9CqFdFuEkuPSEvWjq41/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbxDQ7Bh4OAVEcRhD5P5XCiUXZO7pH8jHQTby0ZHKyYrO-jiT2q6w9cviw8tiOdlqwT6/exec';
 
 // Mock data for initial development or if API is not yet published
 const MOCK_DATA: FeedData[] = [
