@@ -1,0 +1,154 @@
+
+import React from 'react';
+import { FeedData } from '../types';
+
+interface DataTableProps {
+  data: FeedData[];
+  loading: boolean;
+  page: number;
+  setPage: (p: number) => void;
+  itemsPerPage: number;
+}
+
+const DataTable: React.FC<DataTableProps> = ({ data, loading, page, setPage, itemsPerPage }) => {
+  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const currentData = data.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'Layak':
+        return <span className="bg-green-100 text-green-700 px-2 py-0.5 rounded text-[10px] font-bold uppercase dark:bg-green-900/30 dark:text-green-400">Layak</span>;
+      case 'Tidak Layak':
+        return <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded text-[10px] font-bold uppercase dark:bg-red-900/30 dark:text-red-400">Tidak Layak</span>;
+      default:
+        return <span className="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded text-[10px] font-bold uppercase dark:bg-yellow-900/30 dark:text-yellow-400">Tindak Lanjut</span>;
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        {[...Array(5)].map((_, i) => (
+          <div key={i} className="animate-pulse bg-white dark:bg-gray-800 h-16 rounded-lg shadow-sm"></div>
+        ))}
+      </div>
+    );
+  }
+
+  if (data.length === 0) {
+    return (
+      <div className="text-center py-20 bg-white dark:bg-gray-800 rounded-xl shadow-sm border dark:border-gray-700">
+        <i className="fas fa-search-minus text-5xl text-gray-300 mb-4"></i>
+        <h3 className="text-xl font-medium text-gray-600 dark:text-gray-400">Data Tidak Ditemukan</h3>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      {/* Desktop Table View */}
+      <div className="hidden lg:block overflow-hidden bg-white dark:bg-gray-800 rounded-xl shadow-sm border dark:border-gray-700">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse min-w-[1000px]">
+            <thead className="bg-gray-50 dark:bg-gray-700/50">
+              <tr>
+                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Tanggal</th>
+                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Toko</th>
+                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Jenis Pakan</th>
+                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Lokasi</th>
+                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Merek</th>
+                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Kedaluwarsa</th>
+                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Kemasan</th>
+                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Jamur</th>
+                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Kadar Air</th>
+                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Hasil</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+              {currentData.map((item, idx) => (
+                <tr key={idx} className="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                  <td className="px-3 py-3 text-xs text-gray-600 dark:text-gray-400 whitespace-nowrap">{item.tanggal}</td>
+                  <td className="px-3 py-3 text-xs font-bold text-gray-900 dark:text-white uppercase">{item.toko}</td>
+                  <td className="px-3 py-3 text-xs text-gray-700 dark:text-gray-300">{item.jenis}</td>
+                  <td className="px-3 py-3 text-xs text-blue-600 dark:text-blue-400 font-medium whitespace-nowrap">{item.lokasi}</td>
+                  <td className="px-3 py-3 text-xs text-gray-600 dark:text-gray-400">{item.merek}</td>
+                  <td className="px-3 py-3 text-xs text-gray-500 truncate max-w-[120px]" title={item.batch}>{item.batch}</td>
+                  <td className="px-3 py-3 text-xs text-gray-600 dark:text-gray-400">{item.kemasan}</td>
+                  <td className="px-3 py-3 text-xs">
+                    <span className={item.jamur === 'Ya' ? 'text-red-500 font-bold' : 'text-green-500'}>{item.jamur}</span>
+                  </td>
+                  <td className="px-3 py-3 text-xs font-mono">{item.kadarAir}%</td>
+                  <td className="px-3 py-3">{getStatusBadge(item.hasil)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Mobile Card View */}
+      <div className="lg:hidden space-y-4">
+        {currentData.map((item, idx) => (
+          <div key={idx} className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border dark:border-gray-700 space-y-3">
+            <div className="flex justify-between items-start">
+              <span className="text-[10px] font-mono text-gray-400 bg-gray-50 dark:bg-gray-700 px-2 py-0.5 rounded">{item.tanggal}</span>
+              {getStatusBadge(item.hasil)}
+            </div>
+            
+            <div>
+              <h3 className="font-bold text-gray-900 dark:text-white uppercase text-sm leading-tight">{item.toko}</h3>
+              <p className="text-xs text-blue-600 dark:text-blue-400 flex items-center mt-1">
+                <i className="fas fa-map-marker-alt mr-1 text-[10px]"></i> {item.lokasi}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 pt-2 border-t dark:border-gray-700">
+              <div>
+                <div className="text-[10px] text-gray-400 uppercase">Jenis / Merek</div>
+                <div className="text-xs font-semibold">{item.jenis}</div>
+                <div className="text-[10px] text-gray-500">{item.merek}</div>
+              </div>
+              <div>
+                <div className="text-[10px] text-gray-400 uppercase">Kedaluwarsa</div>
+                <div className="text-xs truncate">{item.batch}</div>
+              </div>
+              <div>
+                <div className="text-[10px] text-gray-400 uppercase">Fisik & Jamur</div>
+                <div className="text-xs">
+                  {item.kemasan} • <span className={item.jamur === 'Ya' ? 'text-red-500 font-bold' : ''}>Jamur: {item.jamur}</span>
+                </div>
+              </div>
+              <div>
+                <div className="text-[10px] text-gray-400 uppercase">Kadar Air</div>
+                <div className="text-xs font-mono">{item.kadarAir}%</div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center space-x-2 pt-4">
+          <button 
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+            className="p-2 w-10 h-10 rounded-lg bg-white dark:bg-gray-800 border dark:border-gray-700 disabled:opacity-50 text-gray-500"
+          >
+            <i className="fas fa-chevron-left"></i>
+          </button>
+          <span className="text-sm font-medium px-4">Hal {page} / {totalPages}</span>
+          <button 
+            disabled={page === totalPages}
+            onClick={() => setPage(page + 1)}
+            className="p-2 w-10 h-10 rounded-lg bg-white dark:bg-gray-800 border dark:border-gray-700 disabled:opacity-50 text-gray-500"
+          >
+            <i className="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default DataTable;
