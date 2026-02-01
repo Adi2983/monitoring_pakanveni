@@ -10,12 +10,20 @@ const Header: React.FC<HeaderProps> = ({ darkMode, toggleDarkMode }) => {
   return (
     <header className="sticky top-0 z-50 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-b dark:border-gray-700 shadow-sm transition-colors duration-200">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <div className="bg-primary-600 p-2 rounded-lg">
-            <i className="fas fa-seedling text-white text-xl"></i>
+        <div className="flex items-center space-x-3">
+          <div className="flex-shrink-0">
+            <img 
+              src="logo.png" 
+              alt="Logo CekPakan" 
+              className="h-10 w-10 object-contain rounded-full shadow-sm"
+              onError={(e) => {
+                // Fallback jika file logo.png belum ada
+                (e.target as HTMLImageElement).src = 'https://ui-avatars.com/api/?name=CP&background=16a34a&color=fff';
+              }}
+            />
           </div>
           <h1 className="text-xl font-bold tracking-tight bg-gradient-to-r from-primary-700 to-green-500 bg-clip-text text-transparent">
-            FeedCheck Pro
+            CekPakan Kasongan
           </h1>
         </div>
         
