@@ -36,10 +36,8 @@ const DataTable: React.FC<DataTableProps> = ({ data, loading, page, setPage, ite
     }).format(num);
   };
 
-  // Fungsi untuk membersihkan data NPP dari timestamp jika berupa tanggal
   const formatNPP = (npp: string) => {
     if (!npp) return '-';
-    // Jika mengandung format ISO Date T00:00:00... ambil bagian depannya saja
     if (npp.includes('T') && npp.includes('-')) {
       return npp.split('T')[0];
     }
@@ -70,42 +68,48 @@ const DataTable: React.FC<DataTableProps> = ({ data, loading, page, setPage, ite
       {/* Desktop Table View */}
       <div className="hidden lg:block overflow-hidden bg-white dark:bg-gray-800 rounded-xl shadow-sm border dark:border-gray-700">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[1450px]">
+          <table className="w-full text-left border-collapse min-w-[1550px]">
             <thead className="bg-gray-50 dark:bg-gray-700/50">
               <tr>
-                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Tanggal Input</th>
-                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Toko</th>
-                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Jenis Pakan</th>
-                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Lokasi</th>
-                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Merek Pakan</th>
-                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">NPP</th>
-                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Kedaluwarsa</th>
-                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Kondisi Kemasan</th>
-                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Indikasi Jamur</th>
-                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Kadar Air</th>
-                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Nutrisi</th>
-                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Hasil</th>
-                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Harga</th>
+                <th className="px-4 py-4 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Tgl Input</th>
+                <th className="px-4 py-4 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Toko</th>
+                <th className="px-4 py-4 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Jenis Pakan</th>
+                <th className="px-4 py-4 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Lokasi</th>
+                <th className="px-4 py-4 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Merek</th>
+                <th className="px-4 py-4 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">NPP</th>
+                <th className="px-4 py-4 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Kedaluwarsa</th>
+                <th className="px-4 py-4 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Kemasan</th>
+                <th className="px-4 py-4 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Jamur</th>
+                <th className="px-4 py-4 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">K. Air</th>
+                <th className="px-4 py-4 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Nutrisi</th>
+                <th className="px-4 py-4 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Hasil</th>
+                <th className="px-4 py-4 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Harga</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
               {currentData.map((item, idx) => (
                 <tr key={idx} className="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
-                  <td className="px-3 py-3 text-xs text-gray-600 dark:text-gray-400 whitespace-nowrap">{item.tanggal}</td>
-                  <td className="px-3 py-3 text-xs font-bold text-gray-900 dark:text-white uppercase">{item.toko}</td>
-                  <td className="px-3 py-3 text-xs text-gray-700 dark:text-gray-300">{item.jenis}</td>
-                  <td className="px-3 py-3 text-xs text-blue-600 dark:text-blue-400 font-medium whitespace-nowrap">{item.lokasi}</td>
-                  <td className="px-3 py-3 text-xs text-gray-600 dark:text-gray-400">{item.merek}</td>
-                  <td className="px-3 py-3 text-[10px] font-mono text-gray-500 whitespace-nowrap">{formatNPP(item.npp)}</td>
-                  <td className="px-3 py-3 text-xs text-gray-500 truncate max-w-[120px]" title={item.batch}>{item.batch}</td>
-                  <td className="px-3 py-3 text-xs text-gray-600 dark:text-gray-400">{item.kemasan}</td>
-                  <td className="px-3 py-3 text-xs">
+                  <td className="px-4 py-3 text-[11px] text-gray-500 dark:text-gray-400 whitespace-nowrap">{item.tanggal}</td>
+                  <td className="px-4 py-3 text-xs font-bold text-gray-900 dark:text-white uppercase min-w-[140px]">{item.toko}</td>
+                  <td className="px-4 py-3 text-xs text-gray-700 dark:text-gray-300 min-w-[120px]">{item.jenis}</td>
+                  <td className="px-4 py-3 text-xs text-blue-600 dark:text-blue-400 font-medium whitespace-nowrap">{item.lokasi}</td>
+                  <td className="px-4 py-3 text-xs text-gray-600 dark:text-gray-400">{item.merek}</td>
+                  <td className="px-4 py-3 text-[10px] font-mono text-gray-500 whitespace-nowrap">{formatNPP(item.npp)}</td>
+                  <td className="px-4 py-3 text-[11px] text-gray-600 dark:text-gray-400 min-w-[150px] whitespace-normal leading-relaxed">
+                    {item.batch}
+                  </td>
+                  <td className="px-4 py-3 text-xs text-gray-600 dark:text-gray-400">{item.kemasan}</td>
+                  <td className="px-4 py-3 text-xs">
                     <span className={item.jamur === 'Ya' ? 'text-red-500 font-bold' : 'text-green-500'}>{item.jamur}</span>
                   </td>
-                  <td className="px-3 py-3 text-xs font-mono">{item.kadarAir}%</td>
-                  <td className="px-3 py-3 text-[10px] text-gray-600 dark:text-gray-400 max-w-[150px] truncate">{item.nutrisi || '-'}</td>
-                  <td className="px-3 py-3">{getStatusBadge(item.hasil)}</td>
-                  <td className="px-3 py-3 text-xs font-bold text-gray-900 dark:text-white whitespace-nowrap">{formatCurrency(item.harga)}</td>
+                  <td className="px-4 py-3 text-xs font-mono">{item.kadarAir}%</td>
+                  <td className="px-4 py-3 text-[11px] text-gray-700 dark:text-gray-300 whitespace-normal min-w-[200px] leading-relaxed py-4">
+                    <div className="bg-gray-50 dark:bg-gray-800/50 p-2 rounded border border-gray-100 dark:border-gray-700 italic">
+                      {item.nutrisi || '-'}
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">{getStatusBadge(item.hasil)}</td>
+                  <td className="px-4 py-3 text-xs font-bold text-gray-900 dark:text-white whitespace-nowrap">{formatCurrency(item.harga)}</td>
                 </tr>
               ))}
             </tbody>
@@ -134,21 +138,24 @@ const DataTable: React.FC<DataTableProps> = ({ data, loading, page, setPage, ite
             </div>
 
             <div className="grid grid-cols-2 gap-3 pt-2 border-t dark:border-gray-700">
+              <div className="col-span-2">
+                 <div className="text-[10px] text-gray-400 uppercase mb-1">Kandungan Nutrisi</div>
+                 <div className="text-xs p-2 bg-gray-50 dark:bg-gray-900/50 rounded border border-gray-100 dark:border-gray-700 italic text-gray-700 dark:text-gray-300">
+                    {item.nutrisi || '-'}
+                 </div>
+              </div>
               <div>
                 <div className="text-[10px] text-gray-400 uppercase">Jenis / Merek</div>
                 <div className="text-xs font-semibold">{item.jenis}</div>
                 <div className="text-[10px] text-gray-500">{item.merek}</div>
               </div>
               <div>
-                <div className="text-[10px] text-gray-400 uppercase">Kandungan</div>
-                <div className="text-[10px] font-mono leading-tight flex flex-wrap gap-x-2">
-                   <span>Air: {item.kadarAir}%</span>
-                   <span className="text-primary-600 dark:text-primary-400 font-bold">Nutrisi: {item.nutrisi || '-'}</span>
-                </div>
+                <div className="text-[10px] text-gray-400 uppercase">Kandungan Air</div>
+                <div className="text-xs font-mono">{item.kadarAir}%</div>
               </div>
               <div>
                 <div className="text-[10px] text-gray-400 uppercase">Kedaluwarsa</div>
-                <div className="text-xs truncate">{item.batch}</div>
+                <div className="text-xs whitespace-normal">{item.batch}</div>
               </div>
               <div>
                 <div className="text-[10px] text-gray-400 uppercase">Kondisi</div>
@@ -165,15 +172,15 @@ const DataTable: React.FC<DataTableProps> = ({ data, loading, page, setPage, ite
           <button 
             disabled={page === 1}
             onClick={() => setPage(page - 1)}
-            className="p-2 w-10 h-10 rounded-lg bg-white dark:bg-gray-800 border dark:border-gray-700 disabled:opacity-50 text-gray-500"
+            className="p-2 w-10 h-10 rounded-lg bg-white dark:bg-gray-800 border dark:border-gray-700 disabled:opacity-50 text-gray-500 transition-all hover:bg-gray-50 dark:hover:bg-gray-700"
           >
             <i className="fas fa-chevron-left"></i>
           </button>
-          <span className="text-sm font-medium px-4">Hal {page} / {totalPages}</span>
+          <span className="text-sm font-medium px-4 text-gray-600 dark:text-gray-400">Hal {page} / {totalPages}</span>
           <button 
             disabled={page === totalPages}
             onClick={() => setPage(page + 1)}
-            className="p-2 w-10 h-10 rounded-lg bg-white dark:bg-gray-800 border dark:border-gray-700 disabled:opacity-50 text-gray-500"
+            className="p-2 w-10 h-10 rounded-lg bg-white dark:bg-gray-800 border dark:border-gray-700 disabled:opacity-50 text-gray-500 transition-all hover:bg-gray-50 dark:hover:bg-gray-700"
           >
             <i className="fas fa-chevron-right"></i>
           </button>
