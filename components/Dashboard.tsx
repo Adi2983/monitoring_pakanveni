@@ -1,9 +1,9 @@
 
 import React, { useMemo, useState } from 'react';
-import { FeedData, FilterState } from '../types';
-import Filters from './Filters';
-import DataTable from './DataTable';
-import Charts from './Charts';
+import { FeedData, FilterState } from '../types.ts';
+import Filters from './Filters.tsx';
+import DataTable from './DataTable.tsx';
+import Charts from './Charts.tsx';
 
 interface DashboardProps {
   data: FeedData[];
@@ -56,7 +56,6 @@ const Dashboard: React.FC<DashboardProps> = ({ data, filters, setFilters, loadin
   , [data]);
 
   const handleExportCSV = () => {
-    // Menambahkan NPP dan Nutrisi ke header CSV
     const headers = ["Tanggal", "Toko", "Lokasi", "Jenis", "Merek", "NPP", "Batch/Exp", "Fisik", "Jamur", "Kadar Air", "Nutrisi", "Kemasan", "Palet", "Hasil", "Harga"];
     const csvContent = [
       headers.join(","),
