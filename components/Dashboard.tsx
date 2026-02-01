@@ -27,7 +27,8 @@ const Dashboard: React.FC<DashboardProps> = ({ data, filters, setFilters, loadin
         (item.toko?.toString().toLowerCase() || '').includes(search) || 
         (item.lokasi?.toString().toLowerCase() || '').includes(search) ||
         (item.merek?.toString().toLowerCase() || '').includes(search) ||
-        (item.jenis?.toString().toLowerCase() || '').includes(search)
+        (item.jenis?.toString().toLowerCase() || '').includes(search) ||
+        (item.npp?.toString().toLowerCase() || '').includes(search)
       );
     }
 
@@ -55,7 +56,8 @@ const Dashboard: React.FC<DashboardProps> = ({ data, filters, setFilters, loadin
   , [data]);
 
   const handleExportCSV = () => {
-    const headers = ["Tanggal", "Toko", "Lokasi", "Jenis", "Merek", "Batch", "Fisik", "Jamur", "Air", "Kemasan", "Palet", "Hasil", "Tindak Lanjut"];
+    // Menambahkan NPP dan Nutrisi ke header CSV
+    const headers = ["Tanggal", "Toko", "Lokasi", "Jenis", "Merek", "NPP", "Batch/Exp", "Fisik", "Jamur", "Kadar Air", "Nutrisi", "Kemasan", "Palet", "Hasil", "Harga"];
     const csvContent = [
       headers.join(","),
       ...filteredData.map(item => [
@@ -64,14 +66,16 @@ const Dashboard: React.FC<DashboardProps> = ({ data, filters, setFilters, loadin
         `"${item.lokasi || ''}"`, 
         `"${item.jenis || ''}"`, 
         `"${item.merek || ''}"`, 
+        `"${item.npp || ''}"`, 
         `"${item.batch || ''}"`, 
         `"${item.kondisiFisik || ''}"`, 
         item.jamur || '', 
         item.kadarAir || '', 
+        `"${item.nutrisi || ''}"`,
         `"${item.kemasan || ''}"`, 
         item.palet || '', 
         item.hasil || '', 
-        `"${item.tindakLanjut || ''}"`
+        item.harga || 0
       ].join(","))
     ].join("\n");
 
@@ -79,7 +83,7 @@ const Dashboard: React.FC<DashboardProps> = ({ data, filters, setFilters, loadin
     const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
     link.setAttribute("href", url);
-    link.setAttribute("download", `FeedQuality_Export_${new Date().toISOString().slice(0,10)}.csv`);
+    link.setAttribute("download", `DataPakan_Kasongan_${new Date().toISOString().slice(0,10)}.csv`);
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
