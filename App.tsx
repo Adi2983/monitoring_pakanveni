@@ -69,7 +69,15 @@ const App: React.FC = () => {
       </main>
       <footer className="bg-white dark:bg-gray-800 py-6 border-t dark:border-gray-700 mt-auto">
         <div className="container mx-auto px-4 text-center text-gray-500 dark:text-gray-400 text-sm">
-          &copy; {new Date().getFullYear()} VeniPuspitasari CekPakan
+          &copy; {new Date().getFullYear()}{' '}
+          <a 
+            href="https://wa.me/6282223082964" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="hover:text-primary-600 transition-colors duration-200 underline decoration-dotted underline-offset-4"
+          >
+            VeniPuspitasari CekPakan
+          </a>
         </div>
       </footer>
     </div>
