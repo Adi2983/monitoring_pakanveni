@@ -60,7 +60,7 @@ const DataTable: React.FC<DataTableProps> = ({ data, loading, page, setPage, ite
       {/* Desktop Table View */}
       <div className="hidden lg:block overflow-hidden bg-white dark:bg-gray-800 rounded-xl shadow-sm border dark:border-gray-700">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[1250px]">
+          <table className="w-full text-left border-collapse min-w-[1450px]">
             <thead className="bg-gray-50 dark:bg-gray-700/50">
               <tr>
                 <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Tanggal Input</th>
@@ -68,10 +68,12 @@ const DataTable: React.FC<DataTableProps> = ({ data, loading, page, setPage, ite
                 <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Jenis Pakan</th>
                 <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Lokasi</th>
                 <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Merek Pakan</th>
+                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">NPP</th>
                 <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Kedaluwarsa</th>
                 <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Kondisi Kemasan</th>
                 <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Indikasi Jamur</th>
-                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Kandungan Kadar Air</th>
+                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Kadar Air</th>
+                <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Nutrisi</th>
                 <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Hasil</th>
                 <th className="px-3 py-3 font-semibold text-[11px] text-gray-500 uppercase tracking-wider">Harga</th>
               </tr>
@@ -84,12 +86,14 @@ const DataTable: React.FC<DataTableProps> = ({ data, loading, page, setPage, ite
                   <td className="px-3 py-3 text-xs text-gray-700 dark:text-gray-300">{item.jenis}</td>
                   <td className="px-3 py-3 text-xs text-blue-600 dark:text-blue-400 font-medium whitespace-nowrap">{item.lokasi}</td>
                   <td className="px-3 py-3 text-xs text-gray-600 dark:text-gray-400">{item.merek}</td>
+                  <td className="px-3 py-3 text-[10px] font-mono text-gray-500">{item.npp || '-'}</td>
                   <td className="px-3 py-3 text-xs text-gray-500 truncate max-w-[120px]" title={item.batch}>{item.batch}</td>
                   <td className="px-3 py-3 text-xs text-gray-600 dark:text-gray-400">{item.kemasan}</td>
                   <td className="px-3 py-3 text-xs">
                     <span className={item.jamur === 'Ya' ? 'text-red-500 font-bold' : 'text-green-500'}>{item.jamur}</span>
                   </td>
                   <td className="px-3 py-3 text-xs font-mono">{item.kadarAir}%</td>
+                  <td className="px-3 py-3 text-[10px] text-gray-600 dark:text-gray-400 max-w-[150px] truncate">{item.nutrisi || '-'}</td>
                   <td className="px-3 py-3">{getStatusBadge(item.hasil)}</td>
                   <td className="px-3 py-3 text-xs font-bold text-gray-900 dark:text-white whitespace-nowrap">{formatCurrency(item.harga)}</td>
                 </tr>
@@ -113,9 +117,10 @@ const DataTable: React.FC<DataTableProps> = ({ data, loading, page, setPage, ite
             
             <div>
               <h3 className="font-bold text-gray-900 dark:text-white uppercase text-sm leading-tight">{item.toko}</h3>
-              <p className="text-xs text-blue-600 dark:text-blue-400 flex items-center mt-1">
-                <i className="fas fa-map-marker-alt mr-1 text-[10px]"></i> {item.lokasi}
-              </p>
+              <div className="flex flex-wrap gap-2 mt-1">
+                <span className="text-[10px] bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 px-1.5 py-0.5 rounded border border-blue-100 dark:border-blue-800">{item.lokasi}</span>
+                {item.npp && <span className="text-[10px] bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-1.5 py-0.5 rounded">NPP: {item.npp}</span>}
+              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3 pt-2 border-t dark:border-gray-700">
@@ -125,18 +130,17 @@ const DataTable: React.FC<DataTableProps> = ({ data, loading, page, setPage, ite
                 <div className="text-[10px] text-gray-500">{item.merek}</div>
               </div>
               <div>
+                <div className="text-[10px] text-gray-400 uppercase">Kandungan</div>
+                <div className="text-[10px] font-mono leading-tight">Air: {item.kadarAir}%</div>
+                <div className="text-[10px] text-primary-600 dark:text-primary-400 italic truncate">{item.nutrisi || 'Nutrisi -'}</div>
+              </div>
+              <div>
                 <div className="text-[10px] text-gray-400 uppercase">Kedaluwarsa</div>
                 <div className="text-xs truncate">{item.batch}</div>
               </div>
               <div>
-                <div className="text-[10px] text-gray-400 uppercase">Kemasan & Jamur</div>
-                <div className="text-xs">
-                  {item.kemasan} • <span className={item.jamur === 'Ya' ? 'text-red-500 font-bold' : ''}>Jamur: {item.jamur}</span>
-                </div>
-              </div>
-              <div>
-                <div className="text-[10px] text-gray-400 uppercase">Kadar Air</div>
-                <div className="text-xs font-mono">{item.kadarAir}%</div>
+                <div className="text-[10px] text-gray-400 uppercase">Kondisi</div>
+                <div className="text-[10px]">{item.kemasan} • <span className={item.jamur === 'Ya' ? 'text-red-500 font-bold' : ''}>Jamur: {item.jamur}</span></div>
               </div>
             </div>
           </div>
