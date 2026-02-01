@@ -1,9 +1,9 @@
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { FeedData, FilterState } from './types';
-import Dashboard from './components/Dashboard';
-import Header from './components/Header';
-import { fetchFeedData } from './services/api';
+import React, { useState, useEffect } from 'react';
+import { FeedData, FilterState } from './types.ts';
+import Dashboard from './components/Dashboard.tsx';
+import Header from './components/Header.tsx';
+import { fetchFeedData } from './services/api.ts';
 
 const App: React.FC = () => {
   const [data, setData] = useState<FeedData[]>([]);
@@ -39,8 +39,8 @@ const App: React.FC = () => {
         setData(result);
         setError(null);
       } catch (err) {
-        setError('Gagal memuat data. Menggunakan data cache jika tersedia.');
-        // Fallback is handled in api.ts
+        console.error("Error loading data:", err);
+        setError('Gagal memuat data dari API. Mencoba menggunakan data cadangan.');
       } finally {
         setLoading(false);
       }
@@ -69,7 +69,7 @@ const App: React.FC = () => {
       </main>
       <footer className="bg-white dark:bg-gray-800 py-6 border-t dark:border-gray-700 mt-auto">
         <div className="container mx-auto px-4 text-center text-gray-500 dark:text-gray-400 text-sm">
-          &copy; VeniPuspitasari CekPakan
+          &copy; {new Date().getFullYear()} VeniPuspitasari CekPakan
         </div>
       </footer>
     </div>
