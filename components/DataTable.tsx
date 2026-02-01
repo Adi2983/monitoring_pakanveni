@@ -14,6 +14,26 @@ const DataTable: React.FC<DataTableProps> = ({ data, loading, page, setPage, ite
   const totalPages = Math.ceil(data.length / itemsPerPage);
   const currentData = data.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
+  // Fungsi untuk mewarnai label nutrisi secara spesifik
+  const renderColoredNutrisi = (text: string) => {
+    if (!text) return '-';
+    
+    // Pecah string berdasarkan label yang diinginkan
+    const parts = text.split(/(PK|LK|SK|ABU|Ca|P)/g);
+    
+    return parts.map((part, i) => {
+      switch (part) {
+        case 'PK': return <span key={i} className="font-bold text-green-600 dark:text-green-400">PK</span>;
+        case 'LK': return <span key={i} className="font-bold text-blue-600 dark:text-blue-400">LK</span>;
+        case 'SK': return <span key={i} className="font-bold text-red-600 dark:text-red-400">SK</span>;
+        case 'ABU': return <span key={i} className="font-bold text-yellow-500 dark:text-yellow-400">ABU</span>;
+        case 'Ca': return <span key={i} className="font-bold text-orange-500">Ca</span>;
+        case 'P': return <span key={i} className="font-bold text-cyan-600 dark:text-cyan-400">P</span>;
+        default: return <span key={i}>{part}</span>;
+      }
+    });
+  };
+
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'Layak':
@@ -103,9 +123,10 @@ const DataTable: React.FC<DataTableProps> = ({ data, loading, page, setPage, ite
                     <span className={item.jamur === 'Ya' ? 'text-red-500 font-bold' : 'text-green-500'}>{item.jamur}</span>
                   </td>
                   <td className="px-4 py-3 text-xs font-mono">{item.kadarAir}%</td>
-                  <td className="px-4 py-3 text-[11px] text-gray-700 dark:text-gray-300 whitespace-normal min-w-[200px] leading-relaxed py-4">
-                    <div className="bg-gray-50 dark:bg-gray-800/50 p-2 rounded border border-gray-100 dark:border-gray-700 italic">
-                      {item.nutrisi || '-'}
+                  <td className="px-4 py-3 text-[11px] text-gray-700 dark:text-gray-300 whitespace-normal min-w-[220px] leading-relaxed">
+                    {/* Hapus div box, tampilkan teks berwarna langsung */}
+                    <div className="italic py-1">
+                      {renderColoredNutrisi(item.nutrisi)}
                     </div>
                   </td>
                   <td className="px-4 py-3">{getStatusBadge(item.hasil)}</td>
@@ -133,33 +154,44 @@ const DataTable: React.FC<DataTableProps> = ({ data, loading, page, setPage, ite
               <h3 className="font-bold text-gray-900 dark:text-white uppercase text-sm leading-tight">{item.toko}</h3>
               <div className="flex flex-wrap gap-2 mt-1">
                 <span className="text-[10px] bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 px-1.5 py-0.5 rounded border border-blue-100 dark:border-blue-800">{item.lokasi}</span>
-                {item.npp && <span className="text-[10px] bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-1.5 py-0.5 rounded">NPP: {formatNPP(item.npp)}</span>}
+                {item.npp && <span className="text-[10px] bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-1.5 py-0.5 rounded uppercase">NPP: {formatNPP(item.npp)}</span>}
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 pt-2 border-t dark:border-gray-700">
-              <div className="col-span-2">
-                 <div className="text-[10px] text-gray-400 uppercase mb-1">Kandungan Nutrisi</div>
-                 <div className="text-xs p-2 bg-gray-50 dark:bg-gray-900/50 rounded border border-gray-100 dark:border-gray-700 italic text-gray-700 dark:text-gray-300">
-                    {item.nutrisi || '-'}
-                 </div>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-3 pt-3 border-t dark:border-gray-700">
+              {/* Kolom Kiri: Nutrisi & Kadar Air (Stacked Vertically) */}
+              <div className="flex flex-col space-y-3">
+                <div>
+                  <div className="text-[10px] text-gray-400 uppercase mb-0.5">Kandungan Nutrisi</div>
+                  <div className="text-[11px] leading-relaxed italic text-gray-700 dark:text-gray-300">
+                    {renderColoredNutrisi(item.nutrisi)}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-[10px] text-gray-400 uppercase mb-0.5">Kandungan Air</div>
+                  <div className="text-xs font-mono font-bold text-gray-900 dark:text-white">{item.kadarAir}%</div>
+                </div>
               </div>
-              <div>
-                <div className="text-[10px] text-gray-400 uppercase">Jenis / Merek</div>
-                <div className="text-xs font-semibold">{item.jenis}</div>
-                <div className="text-[10px] text-gray-500">{item.merek}</div>
+
+              {/* Kolom Kanan: Jenis & Kedaluwarsa */}
+              <div className="flex flex-col space-y-3">
+                <div>
+                  <div className="text-[10px] text-gray-400 uppercase mb-0.5">Jenis / Merek</div>
+                  <div className="text-xs font-semibold">{item.jenis}</div>
+                  <div className="text-[10px] text-gray-500">{item.merek}</div>
+                </div>
+                <div>
+                  <div className="text-[10px] text-gray-400 uppercase mb-0.5">Kedaluwarsa</div>
+                  <div className="text-xs whitespace-normal">{item.batch}</div>
+                </div>
               </div>
-              <div>
-                <div className="text-[10px] text-gray-400 uppercase">Kandungan Air</div>
-                <div className="text-xs font-mono">{item.kadarAir}%</div>
-              </div>
-              <div>
-                <div className="text-[10px] text-gray-400 uppercase">Kedaluwarsa</div>
-                <div className="text-xs whitespace-normal">{item.batch}</div>
-              </div>
-              <div>
-                <div className="text-[10px] text-gray-400 uppercase">Kondisi</div>
-                <div className="text-[10px]">{item.kemasan} • <span className={item.jamur === 'Ya' ? 'text-red-500 font-bold' : ''}>Jamur: {item.jamur}</span></div>
+
+              {/* Baris Terakhir: Kondisi */}
+              <div className="col-span-2 pt-1">
+                <div className="text-[10px] text-gray-400 uppercase mb-0.5">Kondisi Kemasan & Jamur</div>
+                <div className="text-xs text-gray-600 dark:text-gray-400">
+                   {item.kemasan} • <span className={item.jamur === 'Ya' ? 'text-red-500 font-bold' : 'text-green-500'}>Jamur: {item.jamur}</span>
+                </div>
               </div>
             </div>
           </div>
