@@ -36,6 +36,16 @@ const DataTable: React.FC<DataTableProps> = ({ data, loading, page, setPage, ite
     }).format(num);
   };
 
+  // Fungsi untuk membersihkan data NPP dari timestamp jika berupa tanggal
+  const formatNPP = (npp: string) => {
+    if (!npp) return '-';
+    // Jika mengandung format ISO Date T00:00:00... ambil bagian depannya saja
+    if (npp.includes('T') && npp.includes('-')) {
+      return npp.split('T')[0];
+    }
+    return npp;
+  };
+
   if (loading) {
     return (
       <div className="space-y-4">
@@ -86,7 +96,7 @@ const DataTable: React.FC<DataTableProps> = ({ data, loading, page, setPage, ite
                   <td className="px-3 py-3 text-xs text-gray-700 dark:text-gray-300">{item.jenis}</td>
                   <td className="px-3 py-3 text-xs text-blue-600 dark:text-blue-400 font-medium whitespace-nowrap">{item.lokasi}</td>
                   <td className="px-3 py-3 text-xs text-gray-600 dark:text-gray-400">{item.merek}</td>
-                  <td className="px-3 py-3 text-[10px] font-mono text-gray-500">{item.npp || '-'}</td>
+                  <td className="px-3 py-3 text-[10px] font-mono text-gray-500 whitespace-nowrap">{formatNPP(item.npp)}</td>
                   <td className="px-3 py-3 text-xs text-gray-500 truncate max-w-[120px]" title={item.batch}>{item.batch}</td>
                   <td className="px-3 py-3 text-xs text-gray-600 dark:text-gray-400">{item.kemasan}</td>
                   <td className="px-3 py-3 text-xs">
@@ -119,7 +129,7 @@ const DataTable: React.FC<DataTableProps> = ({ data, loading, page, setPage, ite
               <h3 className="font-bold text-gray-900 dark:text-white uppercase text-sm leading-tight">{item.toko}</h3>
               <div className="flex flex-wrap gap-2 mt-1">
                 <span className="text-[10px] bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 px-1.5 py-0.5 rounded border border-blue-100 dark:border-blue-800">{item.lokasi}</span>
-                {item.npp && <span className="text-[10px] bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-1.5 py-0.5 rounded">NPP: {item.npp}</span>}
+                {item.npp && <span className="text-[10px] bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-1.5 py-0.5 rounded">NPP: {formatNPP(item.npp)}</span>}
               </div>
             </div>
 
@@ -131,8 +141,10 @@ const DataTable: React.FC<DataTableProps> = ({ data, loading, page, setPage, ite
               </div>
               <div>
                 <div className="text-[10px] text-gray-400 uppercase">Kandungan</div>
-                <div className="text-[10px] font-mono leading-tight">Air: {item.kadarAir}%</div>
-                <div className="text-[10px] text-primary-600 dark:text-primary-400 italic truncate">{item.nutrisi || 'Nutrisi -'}</div>
+                <div className="text-[10px] font-mono leading-tight flex flex-wrap gap-x-2">
+                   <span>Air: {item.kadarAir}%</span>
+                   <span className="text-primary-600 dark:text-primary-400 font-bold">Nutrisi: {item.nutrisi || '-'}</span>
+                </div>
               </div>
               <div>
                 <div className="text-[10px] text-gray-400 uppercase">Kedaluwarsa</div>
