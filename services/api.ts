@@ -2,7 +2,7 @@
 import { FeedData } from '../types';
 
 // URL API Terbaru yang disesuaikan dengan spreadsheet user
-const API_URL = 'https://script.google.com/macros/s/AKfycbwWpQ552zpZlbAkg7Z_S3-oVmZ4WVoiYIWtwBPvOcLOVcOISM21rAEUCBQRCla8kDo/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzF6YlwkY5a2q72AYiQix78kxoqf08O8S0QVpOSYhNGss2V8QheepK76Epv_zy3ZtUH/exec';
 
 const MOCK_DATA: FeedData[] = [
   {
