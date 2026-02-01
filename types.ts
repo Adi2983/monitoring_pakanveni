@@ -5,10 +5,12 @@ export interface FeedData {
   lokasi: string;
   jenis: string;
   merek: string;
+  npp: string; // Baru
   batch: string;
   kondisiFisik: string;
   jamur: 'Ya' | 'Tidak';
   kadarAir: number | string;
+  nutrisi: string; // Baru
   kemasan: string;
   palet: 'Ya' | 'Tidak';
   hasil: 'Layak' | 'Tidak Layak' | 'Tindak Lanjut';
