@@ -1,8 +1,7 @@
 
 /**
  * TAHAP 1: SETUP OTOMATIS
- * Jalankan fungsi 'setupSheet' ini satu kali di editor Apps Script 
- * untuk membuat struktur tabel otomatis sesuai urutan kolom yang diminta.
+ * Jalankan fungsi 'setupSheet' ini satu kali untuk memperbarui kolom.
  */
 function setupSheet() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -10,21 +9,23 @@ function setupSheet() {
   sheet.setName("Data Pakan");
   
   const headers = [
-    "Tanggal Pemeriksaan",     // Index 0 (A)
-    "Nama Toko/Poultry",       // Index 1 (B) -> toko
-    "Lokasi Poultry",     // Index 2 (C) -> lokasi
-    "Jenis Pakan / Bahan Pakan",// Index 3 (D) -> jenis
-    "Merek Pakan",             // Index 4 (E) -> merek
-    "Nomor Batch / Expired Date",// Index 5 (F) -> batch
-    "Kondisi Fisik Pakan",      // Index 6 (G)
-    "Indikasi Jamur (Ya/Tidak)", // Index 7 (H)
-    "Kandungan Kadar Air Pakan", // Index 8 (I)
-    "Kondisi Kemasan",          // Index 9 (J)
-    "Penyimpanan Pakai Palet (Ya/Tidak)", // Index 10 (K)
-    "Hasil Pemeriksaan (Layak/Tidak)",    // Index 11 (L)
-    "Tindak Lanjut",            // Index 12 (M)
-    "Keterangan",               // Index 13 (N)
-    "Harga (Rp)"                // Index 14 (O)
+    "Tanggal Pemeriksaan",     // 0 (A)
+    "Nama Toko/Poultry",       // 1 (B)
+    "Lokasi Poultry",          // 2 (C)
+    "Jenis Pakan / Bahan Pakan",// 3 (D)
+    "Merek Pakan",             // 4 (E)
+    "NPP (Nomor Pendaftaran Pakan)", // 5 (F) - BARU
+    "Nomor Batch / Expired Date",// 6 (G)
+    "Kondisi Fisik Pakan",      // 7 (H)
+    "Indikasi Jamur (Ya/Tidak)", // 8 (I)
+    "Kandungan Kadar Air Pakan", // 9 (J)
+    "Kandungan Nutrisi Pakan",  // 10 (K) - BARU
+    "Kondisi Kemasan",          // 11 (L)
+    "Penyimpanan Pakai Palet",  // 12 (M)
+    "Hasil Pemeriksaan",        // 13 (N)
+    "Tindak Lanjut",            // 14 (O)
+    "Keterangan",               // 15 (P)
+    "Harga (Rp)"                // 16 (Q)
   ];
   
   sheet.getRange(1, 1, 1, headers.length).setValues([headers])
@@ -33,16 +34,19 @@ function setupSheet() {
     .setFontWeight("bold")
     .setHorizontalAlignment("center");
   
+  // Contoh data
   const sampleData = [
-    ["2024-01-15", "Toko Makmur Jaya", "Malang", "Pakan Ayam", "CP 511", "EXP: 12/2024", "Bagus", "Tidak", 12.5, "Utuh", "Ya", "Layak", "-", "Stok Baru", 12500],
-    ["2024-01-16", "Poultry Kediri", "Kediri", "Jagung Giling", "Lokal", "EXP: 06/2024", "Sedikit Lembab", "Ya", 18.2, "Rusak", "Tidak", "Tidak Layak", "Segera Retur", "Ditemukan jamur halus", 8500]
+    ["2024-01-15", "Toko Makmur Jaya", "Kasongan", "Pakan Ayam", "CP 511", "RI.I.2301001", "EXP: 12/2024", "Bagus", "Tidak", 12.5, "Protein 18%, Lemak 3%", "Utuh", "Ya", "Layak", "-", "Stok Baru", 350000]
   ];
   
-  sheet.getRange(2, 1, sampleData.length, sampleData[0].length).setValues(sampleData);
+  if (sheet.getLastRow() < 2) {
+    sheet.getRange(2, 1, sampleData.length, sampleData[0].length).setValues(sampleData);
+  }
+  
   sheet.setFrozenRows(1);
   sheet.autoResizeColumns(1, headers.length);
   
-  Logger.log("Setup Berhasil! Toko (Kolom B) dan Lokasi (Kolom C) telah dikunci.");
+  Logger.log("Update Berhasil! Kolom NPP (F) dan Nutrisi (K) telah disinkronkan.");
 }
 
 /**
@@ -58,7 +62,6 @@ function doGet(e) {
 
     const rows = data.slice(1);
     
-    // PEMETAAN BERDASARKAN INDEKS KOLOM (Sangat Akurat)
     const result = rows.map(row => {
       let tanggalVal = row[0];
       if (tanggalVal instanceof Date) {
@@ -67,20 +70,22 @@ function doGet(e) {
 
       return {
         tanggal: tanggalVal || "",
-        toko: row[1] || "",          // KOLOM B (Index 1)
-        lokasi: row[2] || "",        // KOLOM C (Index 2)
-        jenis: row[3] || "",         // KOLOM D
-        merek: row[4] || "",         // KOLOM E
-        batch: row[5] || "",         // KOLOM F
-        kondisiFisik: row[6] || "",
-        jamur: row[7] || "Tidak",
-        kadarAir: row[8] || 0,
-        kemasan: row[9] || "",
-        palet: row[10] || "Tidak",
-        hasil: row[11] || "Layak",
-        tindakLanjut: row[12] || "",
-        keterangan: row[13] || "",
-        harga: row[14] || 0          // KOLOM O (Index 14)
+        toko: row[1] || "",
+        lokasi: row[2] || "",
+        jenis: row[3] || "",
+        merek: row[4] || "",
+        npp: row[5] || "",          // Kolom F
+        batch: row[6] || "",        // Kolom G
+        kondisiFisik: row[7] || "",
+        jamur: row[8] || "Tidak",
+        kadarAir: row[9] || 0,
+        nutrisi: row[10] || "",     // Kolom K
+        kemasan: row[11] || "",
+        palet: row[12] || "Tidak",
+        hasil: row[13] || "Layak",
+        tindakLanjut: row[14] || "",
+        keterangan: row[15] || "",
+        harga: row[16] || 0         // Kolom Q
       };
     });
     
