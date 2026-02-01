@@ -1,7 +1,8 @@
 
 import { FeedData } from '../types';
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbxvxpLedQk_nWNxz5HF5lKVjqEE9DiTMptyjQl2r7MNzdaWy9CqFdFuEkuPSEvWjq41/exec';
+// URL API Terbaru yang disesuaikan dengan spreadsheet user
+const API_URL = 'https://script.google.com/macros/s/AKfycbwWpQ552zpZlbAkg7Z_S3-oVmZ4WVoiYIWtwBPvOcLOVcOISM21rAEUCBQRCla8kDo/exec';
 
 const MOCK_DATA: FeedData[] = [
   {
@@ -27,14 +28,17 @@ const MOCK_DATA: FeedData[] = [
 
 export const fetchFeedData = async (): Promise<FeedData[]> => {
   try {
-    if (API_URL.includes('REPLACE_WITH_YOUR_ID')) {
-      return MOCK_DATA;
-    }
-
     const response = await fetch(API_URL);
     if (!response.ok) throw new Error('Network response was not ok');
     
     const data = await response.json();
+    
+    // Validasi jika data kosong atau bukan array
+    if (!Array.isArray(data)) {
+      console.warn('API returned non-array data, using mock/cache');
+      throw new Error('Invalid data format');
+    }
+
     localStorage.setItem('feed_data_cache', JSON.stringify(data));
     return data;
   } catch (error) {
