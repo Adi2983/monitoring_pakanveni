@@ -76,7 +76,7 @@ const App: React.FC = () => {
             rel="noopener noreferrer"
             className="hover:text-primary-600 transition-colors duration-200 underline decoration-dotted underline-offset-4"
           >
-            VeniPuspitasari CekPakan
+            mama CekPakan
           </a>
         </div>
       </footer>
