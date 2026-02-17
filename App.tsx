@@ -71,12 +71,12 @@ const App: React.FC = () => {
         <div className="container mx-auto px-4 text-center text-gray-500 dark:text-gray-400 text-sm">
           &copy; {new Date().getFullYear()}{' '}
           <a 
-            href="https://wa.me/6285705790490" 
+            href="https://wa.me/6282223082964" 
             target="_blank" 
             rel="noopener noreferrer"
             className="hover:text-primary-600 transition-colors duration-200 underline decoration-dotted underline-offset-4"
           >
-            mama CekPakan
+            VeniPuspitasari CekPakan
           </a>
         </div>
       </footer>
